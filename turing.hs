@@ -42,3 +42,5 @@ decide tm = case run tm of
 failingTM :: TM Int Binary
 failingTM = TM (\state symbol -> Left Reject) blankTape 0
 
+haltlessTM = TM (\state symbol -> Right (state + 1, symbol, GoRight)) blankTape 0
+
