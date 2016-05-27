@@ -32,7 +32,14 @@ run tm = do
                   else tape tm
     run tm
 
+decide :: TM state alphabet -> Decision
+decide tm = case run tm of
+              Left decision -> decision
+              _             -> undefined
+
 failingTM :: TM Int Binary
 failingTM = TM (\state symbol -> Left Reject) blankTape 0
+
+
 
 
