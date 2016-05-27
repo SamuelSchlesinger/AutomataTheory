@@ -8,6 +8,10 @@ shiftLeft :: Tape alphabet -> Tape alphabet
 shiftLeft (Tape (List a as) b cs) = Tape as a (List b cs)
 shiftRight (Tape as b (List c cs)) = Tape (List b as) c cs
 
+writeAndShift :: Direction -> alphabet -> Tape alphabet -> Tape alphabet
+writeAndShift GoLeft b' (Tape (List a as) b cs) = Tape as a (List b' cs)
+writeAndShift GoRight b' (Tape as b (List c cs)) = Tape (List b' as) c cs
+
 data Binary  = Blank | Zero | One deriving (Show, Eq)
 data Direction = GoLeft | GoRight | StayHere deriving (Show, Eq)
 data Decision  = Accept | Reject deriving (Show, Eq)
@@ -27,10 +31,8 @@ data TM state alphabet
 run :: TM state alphabet -> Either Decision (TM state alphabet)
 run tm = do 
     (state, sym, direction) <- transition tm (state tm) (symbol $ tape tm)
-    let newtape = if      direction == GoLeft  then shiftLeft $ tape tm
-                  else if direction == GoRight then shiftRight $ tape tm
-                  else tape tm
-    run tm
+    let newtape = writeAndShift direction sym $ tape tm
+    run (tm { tape = newtape, state = state })
 
 decide :: TM state alphabet -> Decision
 decide tm = case run tm of
@@ -39,7 +41,4 @@ decide tm = case run tm of
 
 failingTM :: TM Int Binary
 failingTM = TM (\state symbol -> Left Reject) blankTape 0
-
-
-
 
