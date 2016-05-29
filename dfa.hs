@@ -34,3 +34,19 @@ mparse (x:y:xs) dfa = mparse ((x `mmul` y):xs) dfa
 
 parse :: [symbol] -> DFA symbol state -> Bool
 parse s dfa = mparse (fword s dfa) dfa
+
+{- err... a work in progress
+preduce :: [Elem e] -> Elem e
+preduce []  = Nothing
+preduce [x] = Just x
+preduce es  = runEval $ do
+    let (xs, ys) = splitAt (length es `div` 2) es
+    (Just x) <- rpar (preduce xs)
+    (Just y) <- rpar (preduce ys)
+    return (x `mmul` y)
+
+pmparse :: [Elem state] -> DFA symbol state -> Bool
+pmparse es dfa = case preduce es of
+    Just e -> (dfa accept) e
+    Nothing -> False
+-}
