@@ -35,11 +35,11 @@ mparse (x:y:xs) dfa = mparse ((x `mmul` y):xs) dfa
 parse :: [symbol] -> DFA symbol state -> Bool
 parse s dfa = mparse (fword s dfa) dfa
 
-{- err... a work in progress
-preduce :: [Elem e] -> Elem e
+-- totally not convinced that this works, but if it does I think it achieves the log(n) parallel thing
+preduce :: [Elem e] -> Maybe (Elem e)
 preduce []  = Nothing
 preduce [x] = Just x
-preduce es  = runEval $ do
+preduce es  = return $ runEval $ do
     let (xs, ys) = splitAt (length es `div` 2) es
     (Just x) <- rpar (preduce xs)
     (Just y) <- rpar (preduce ys)
@@ -47,6 +47,5 @@ preduce es  = runEval $ do
 
 pmparse :: [Elem state] -> DFA symbol state -> Bool
 pmparse es dfa = case preduce es of
-    Just e -> (dfa accept) e
+    Just e -> (accept dfa) e
     Nothing -> False
--}
