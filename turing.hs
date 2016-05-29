@@ -44,3 +44,14 @@ failingTM = TM (\state symbol -> Left Reject) blankTape 0
 
 haltlessTM = TM (\state symbol -> Right (state + 1, symbol, GoRight)) blankTape 0
 
+evenZeroTransition 0 Blank = Left Accept
+evenZeroTransition 1 Zero = Right (0, Zero, GoRight)
+evenZeroTransition 0 Zero = Right (1, Zero, GoRight)
+evenZeroTransition _ _ = Left Reject
+
+evenZeroTape = Tape blanks Zero (list Blank [Zero | x <- [1..100]])
+
+evenZeroTM :: TM Int Binary
+evenZeroTM = TM evenZeroTransition evenZeroTape 0
+
+
