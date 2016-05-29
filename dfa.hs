@@ -8,3 +8,6 @@ evalDFA :: DFA state symbol val -> [symbol] -> val
 evalDFA dfa s = f dfa s (dstarting dfa) where
     f dfa [] state = (dvalue dfa) state
     f dfa (x:xs) state = f dfa xs (dtransition dfa x state)
+
+test :: DFA String Char String
+test = DFA (\x s -> (x:s)) reverse []

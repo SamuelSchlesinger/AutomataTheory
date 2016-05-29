@@ -1,4 +1,4 @@
--- | Original author: Kit Fredurra
+-- | Original author: Kit Freddura
 -- | Some refactorings to "haskellify" the code
 -- | From the paper by Armando B. Matos
 -- |     Monoid machines: a O(log n) parser for regular languages.
